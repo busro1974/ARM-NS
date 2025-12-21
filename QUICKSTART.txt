@@ -1,0 +1,235 @@
+"""
+QUICK START GUIDE - Neural-LP System
+=====================================
+
+Panduan cepat untuk memulai menggunakan Neural-LP system.
+"""
+
+# ==================== INSTALLATION ====================
+
+# 1. Pastikan Anda sudah ada di folder project:
+cd c:\Users\USER\Documents\Neural
+
+# 2. Verifikasi Python installation:
+python --version  # Harus Python 3.7+
+
+# ==================== RUNNING EXAMPLES ====================
+
+# RUN MAIN DEMO (recommended untuk pemula)
+python main_neural_lp.py
+
+# RUN ADVANCED EXAMPLE (untuk advanced users)
+cd src
+python advanced_example.py
+
+# ==================== BASIC USAGE ====================
+
+# Import modules
+from src.rdf_graph import RDFGraph
+from src.neural_lp import NeuralLPHybrid
+
+# 1. Create RDF Graph
+graph = RDFGraph()
+
+# 2. Add triples (Subject, Predicate, Object)
+graph.add_triple('customer_1', 'buys', 'product_1')
+graph.add_triple('customer_1', 'buys', 'product_2')
+graph.add_triple('product_1', 'has_category', 'electronics')
+
+# 3. Create Neural-LP model
+model = NeuralLPHybrid(
+    graph,
+    embedding_dim=64,      # Dimension embedding
+    alpha=0.5,            # Balance neural vs rules (0.5 = equal)
+    rule_weight=0.4       # Weight for rules
+)
+
+# 4. Train model
+model.train(
+    num_epochs=10,        # Training iterations
+    learning_rate=0.01,   # Learning rate
+    mine_rules=True       # Extract rules
+)
+
+# 5. Make predictions
+prediction = model.predict_link('customer_1', 'buys', 'product_3')
+print(f"Confidence: {prediction.confidence:.2%}")
+print(model.explain_prediction(prediction))
+
+# 6. Rank candidates
+candidates = ['product_3', 'product_4', 'product_5']
+ranked = model.rank_candidates('customer_1', 'buys', candidates, top_k=3)
+
+for i, pred in enumerate(ranked, 1):
+    print(f"{i}. {pred.target} (confidence: {pred.confidence:.2%})")
+
+# ==================== ADVANCED USAGE ====================
+
+# SEMANTIC ANALYSIS
+from src.semantic_interestingness import SemanticInterestingnessMeasure
+
+semantic = SemanticInterestingnessMeasure(graph)
+
+# Calculate rule quality metrics
+metrics = {
+    'confidence': 0.85,
+    'lift': 1.2,
+    'coherence': 0.75,
+    'informativeness': 0.9,
+    'novelty': 0.8
+}
+
+combined_score = semantic.combined_interestingness(rule, metrics)
+print(f"Rule quality score: {combined_score:.4f}")
+
+# CROSS-DOMAIN EVALUATION
+from src.cross_domain_evaluation import CrossDomainEvaluator
+
+models = {
+    'domain1': model1,
+    'domain2': model2,
+    'domain3': model3
+}
+
+test_data = {
+    'domain1': [(s1, p1, o1), (s2, p2, o2), ...],
+    'domain2': [(s3, p3, o3), ...],
+    'domain3': [...]
+}
+
+evaluator = CrossDomainEvaluator(models)
+results = evaluator.evaluate_all_domains(test_data)
+
+print("Overall metrics:")
+print(f"  Hits@10: {results['overall_metrics']['avg_hits_at_10']:.4f}")
+print(f"  MRR:     {results['overall_metrics']['avg_mrr']:.4f}")
+print(f"  AUC:     {results['overall_metrics']['avg_auc']:.4f}")
+
+# ==================== CONFIGURATION ====================
+
+# Default Hyperparameters:
+
+# embedding_dim: 64
+#   - Dimension dari entity dan relation embeddings
+#   - Smaller = faster training, less expressive
+#   - Larger = slower training, more expressive
+#   - Try: 32, 64, 128
+
+# alpha: 0.5
+#   - Balance antara neural dan rule-based scores
+#   - 0.0 = pure rule-based
+#   - 0.5 = equal weight
+#   - 1.0 = pure neural
+#   - Try: 0.3, 0.5, 0.7
+
+# learning_rate: 0.01
+#   - Step size untuk gradient descent
+#   - Smaller = more stable, slower convergence
+#   - Larger = faster but unstable
+#   - Try: 0.001, 0.01, 0.1
+
+# num_epochs: 10-20
+#   - Training iterations
+#   - More = better convergence, risk overfitting
+#   - Try: 5, 10, 20, 50
+
+# ==================== TROUBLESHOOTING ====================
+
+# ERROR: ImportError: No module named 'src'
+# SOLUTION: Run from project root directory (c:\Users\USER\Documents\Neural)
+
+# ERROR: AttributeError: 'NoneType' object has no attribute...
+# SOLUTION: Graph might be empty. Add more triples before training.
+
+# ERROR: Low confidence scores
+# SOLUTION: 
+#   1. Increase num_epochs for training
+#   2. Use more training data
+#   3. Adjust alpha (try 0.3 or 0.7)
+#   4. Check embedding_dim (try 128)
+
+# Rule mining returns 0 rules
+# SOLUTION: Sample data too small. Need at least 20-30 triples
+#           to mine meaningful rules.
+
+# ==================== PERFORMANCE TIPS ====================
+
+# 1. Use appropriate embedding_dim
+#    - Small dataset (<100 entities): 32-64
+#    - Medium dataset (100-1000): 64-128
+#    - Large dataset (>1000): 128-256
+
+# 2. Tune learning_rate
+#    - Start with 0.01
+#    - If loss oscillates, decrease to 0.001
+#    - If convergence is slow, increase to 0.1
+
+# 3. Adjust alpha based on your data
+#    - More structured data (KG): use higher alpha (0.7)
+#    - More transaction data: use lower alpha (0.3)
+#    - Balance: use 0.5
+
+# 4. Use cross-validation
+#    - Split data into train/test
+#    - Evaluate on multiple folds
+#    - Report mean and std metrics
+
+# ==================== NEXT STEPS ====================
+
+# 1. Read IMPLEMENTATION_SUMMARY.txt untuk detailed documentation
+# 2. Review main_neural_lp.py untuk complete example
+# 3. Check src/advanced_example.py untuk advanced usage
+# 4. Explore semantic_interestingness.py untuk available metrics
+# 5. Customize untuk your specific domain dan data
+
+# ==================== QUICK REFERENCE ====================
+
+# File Structure:
+# c:\Users\USER\Documents\Neural\
+# ├── src/
+# │   ├── rdf_graph.py                 - RDF graph handling
+# │   ├── neural_network.py            - TransE embeddings
+# │   ├── rule_mining.py               - Rule extraction
+# │   ├── semantic_interestingness.py  - Quality metrics
+# │   ├── neural_lp.py                 - Main hybrid system
+# │   ├── cross_domain_evaluation.py   - Multi-domain eval
+# │   └── advanced_example.py          - Advanced usage
+# ├── main_neural_lp.py                - Main demo
+# ├── README.py                        - Documentation
+# └── IMPLEMENTATION_SUMMARY.txt       - Detailed guide
+
+# Key Classes:
+# - RDFGraph: Graph data structure
+# - RelationalGraphNeuralNetwork: Neural component
+# - RuleMiningEngine: Rule mining component
+# - SemanticInterestingnessMeasure: Quality metrics
+# - NeuralLPHybrid: Main system
+# - CrossDomainEvaluator: Multi-domain evaluation
+
+# Key Methods:
+# - NeuralLPHybrid.train(): Train the model
+# - NeuralLPHybrid.predict_link(): Make predictions
+# - NeuralLPHybrid.rank_candidates(): Rank targets
+# - CrossDomainEvaluator.evaluate_all_domains(): Evaluate
+
+print("""
+Neural-LP System Quick Start
+============================
+
+Welcome! Here's how to get started:
+
+1. Run main example:
+   python main_neural_lp.py
+
+2. Read documentation:
+   python README.py
+
+3. Try advanced example:
+   cd src && python advanced_example.py
+
+4. Use in your code:
+   from src.neural_lp import NeuralLPHybrid
+   from src.rdf_graph import RDFGraph
+
+Happy experimenting! 🚀
+""")
