@@ -1,0 +1,6 @@
+# Test triples
+customer_2	buys	product_4
+customer_6	buys	product_3
+product_4	has_category	kitchen
+product_6	made_by	brand_a
+customer_3	viewed	product_8

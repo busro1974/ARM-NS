@@ -198,6 +198,15 @@ print(f"  AUC:     {results['overall_metrics']['avg_auc']:.4f}")
 # ├── README.py                        - Documentation
 # └── IMPLEMENTATION_SUMMARY.txt       - Detailed guide
 
+# SAMPLE DATASET
+# The repository contains a sample dataset under `data/sample_dataset/` with
+# `train.txt`, `valid.txt` and `test.txt` (tab-separated columns). A helper
+# script `scripts/load_dataset.py` is provided to load the data, train a short
+# demo model, and print example predictions.
+#
+# Run the demo script:
+#   python scripts/load_dataset.py
+
 # Key Classes:
 # - RDFGraph: Graph data structure
 # - RelationalGraphNeuralNetwork: Neural component

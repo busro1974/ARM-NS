@@ -149,3 +149,39 @@ class RDFGraph:
                 del self.graph[subject][obj]
             if triple in self.predicate_index[predicate]:
                 self.predicate_index[predicate].remove(triple)
+
+    def load_from_file(self, path: str, sep: str = '\t', comment: str = '#') -> int:
+        """Load triples from a text file into the graph.
+
+        Each non-empty, non-comment line should contain at least 3 columns
+        separated by `sep`: subject, predicate, object.
+
+        Returns the number of triples added.
+        """
+        loaded = 0
+        triples = []
+        with open(path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith(comment):
+                    continue
+                parts = line.split(sep)
+                if len(parts) >= 3:
+                    s, p, o = parts[0].strip(), parts[1].strip(), parts[2].strip()
+                    triples.append((s, p, o))
+
+        self.add_triples_batch(triples)
+        loaded = len(triples)
+        return loaded
+
+    def load_from_dir(self, dir_path: str, pattern: str = '*.txt', sep: str = '\t', comment: str = '#') -> int:
+        """Load all files matching pattern from a directory into the graph.
+
+        Returns the total number of triples loaded.
+        """
+        import glob, os
+
+        total = 0
+        for p in glob.glob(os.path.join(dir_path, pattern)):
+            total += self.load_from_file(p, sep=sep, comment=comment)
+        return total

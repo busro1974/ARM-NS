@@ -1,0 +1,6 @@
+# Validation triples
+customer_1	buys	product_3
+customer_4	buys	product_8
+product_3	has_category	kitchen
+product_8	made_by	brand_b
+customer_5	viewed	product_1
