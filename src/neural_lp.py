@@ -42,13 +42,19 @@ class NeuralLPHybrid:
         self.rule_cache: Dict = {}
     
     def train(self, num_epochs: int = 20, learning_rate: float = 0.01, mine_rules: bool = True):
-        """Train hybrid model (neural + rule mining)"""
+        """Train hybrid model (neural + rule mining) and store training history"""
         print("="*60)
         print("Training Neural-LP Hybrid Model")
         print("="*60)
         
         print("\n[1/2] Training Neural Network Component...")
-        self.neural_model.train_on_triples(num_epochs=num_epochs, learning_rate=learning_rate)
+        history = self.neural_model.train_on_triples(num_epochs=num_epochs, learning_rate=learning_rate)
+        # store training history for plotting/analysis
+        self.training_history = {
+            'epochs': num_epochs,
+            'learning_rate': learning_rate,
+            'loss': history,
+        }
         
         if mine_rules:
             print("\n[2/2] Mining Semantic Rules...")

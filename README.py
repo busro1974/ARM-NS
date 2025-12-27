@@ -1,7 +1,9 @@
 """
 README: Neural-LP System - Hybrid Neural Network + Rule Mining for Link Prediction
 
-[![CI](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml)
+[![CI](https://github.com/busro1974/ARM-NS/actions/workflows/ci.yml/badge.svg)](https://github.com/busro1974/ARM-NS/actions/workflows/ci.yml)
+
+# Catatan: Badge ini diisi otomatis dari remote `origin` (git@github.com:busro1974/ARM-NS.git). Jika perlu, ganti manual `busro1974/ARM-NS` dengan repo Anda.
 
 DESKRIPSI SISTEM
 ================

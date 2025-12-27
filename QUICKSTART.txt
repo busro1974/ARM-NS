@@ -206,6 +206,12 @@ print(f"  AUC:     {results['overall_metrics']['avg_auc']:.4f}")
 #
 # Run the demo script:
 #   python scripts/load_dataset.py
+#
+# To generate plots (training loss, confidence histogram, predicate counts):
+#   python scripts/plot_training.py
+#   or with options, e.g.:
+#     python scripts/plot_training.py --epochs 30 --embedding-dim 64 --out-dir outputs/my_run
+#   Output images are written to the directory specified by `--out-dir` (default: `outputs/`).
 
 # Key Classes:
 # - RDFGraph: Graph data structure

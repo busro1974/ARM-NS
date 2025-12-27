@@ -151,8 +151,12 @@ class RelationalGraphNeuralNetwork:
         return loss
 
     def train_on_triples(self, num_epochs: int = 10, learning_rate: float = 0.01):
-        """Train model pada semua triples"""
+        """Train model pada semua triples
+
+        Returns a list of average losses (one per epoch) for plotting/analysis.
+        """
         triples = list(self.graph.triples)
+        history = []
 
         for epoch in range(num_epochs):
             total_loss = 0.0
@@ -167,9 +171,13 @@ class RelationalGraphNeuralNetwork:
 
             self.transe_model.normalize_embeddings()
 
+            avg_loss = total_loss / len(triples) if triples else 0
+            history.append(avg_loss)
+
             if epoch % max(1, num_epochs // 10) == 0:
-                avg_loss = total_loss / len(triples) if triples else 0
                 print(f"Epoch {epoch}: Avg Loss = {avg_loss:.4f}")
+
+        return history
 
     def predict_link(self, head: str, relation: str, tail: str) -> float:
         """
